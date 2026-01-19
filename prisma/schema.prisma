@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TicketStatus {
+  ABERTA
+  EM_ANDAMENTO
+  CONCLUIDA
+  CANCELADA
+}
+
+model Sector {
+  id                 Int      @id @default(autoincrement())
+  name               String   @unique
+  
+  users              User[]   
+  ticketsRequested   Ticket[] @relation("Solicitante")
+  ticketsResponsible Ticket[] @relation("Responsavel")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String   
+  
+  sectorId  Int
+  sector    Sector   @relation(fields: [sectorId], references: [id])
+  
+  actions   TicketHistory[]
+}
+
+model Ticket {
+  id                 Int          @id @default(autoincrement())
+  titulo             String
+  descricao          String       @db.Text
+  status             TicketStatus @default(ABERTA)
+  prioridade         String
+  dataCriacao        DateTime     @default(now())
+
+  setorSolicitanteId Int
+  setorSolicitante   Sector       @relation("Solicitante", fields: [setorSolicitanteId], references: [id])
+
+  setorResponsavelId Int
+  setorResponsavel   Sector       @relation("Responsavel", fields: [setorResponsavelId], references: [id])
+
+  historico          TicketHistory[]
+}
+
+model TicketHistory {
+  id             Int          @id @default(autoincrement())
+  
+  ticketId       Int
+  ticket         Ticket       @relation(fields: [ticketId], references: [id])
+  
+  userId         Int
+  user           User         @relation(fields: [userId], references: [id])
+  
+  statusAnterior TicketStatus?
+  statusNovo     TicketStatus
+  dataAlteracao  DateTime     @default(now())
+}
