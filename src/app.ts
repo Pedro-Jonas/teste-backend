@@ -1,6 +1,6 @@
-import express from "express";
-import cors from "cors";
-import ticketRoutes from "../src/routes/tickets.Routes";
+import express from 'express';
+import cors from 'cors';
+import ticketRoutes from '../src/routes/tickets.Routes';
 
 export const app = express();
 

@@ -1,5 +1,5 @@
-import { Prisma, TicketHistory } from "@prisma/client";
-import { prisma } from "../lib/client";
+import { Prisma, TicketHistory } from '@prisma/client';
+import { prisma } from '../lib/client';
 
 export class TicketHistoryRepository {
   async create(data: Prisma.TicketHistoryCreateInput): Promise<TicketHistory> {
@@ -13,7 +13,7 @@ export class TicketHistoryRepository {
   async findByTicket(ticketId: number | string): Promise<TicketHistory[]> {
     return prisma.ticketHistory.findMany({
       where: { ticketId: Number(ticketId) },
-      orderBy: { dataAlteracao: "asc" },
+      orderBy: { dataAlteracao: 'asc' },
     });
   }
 }

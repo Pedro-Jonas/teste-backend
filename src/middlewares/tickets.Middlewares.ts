@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { TicketRepository } from "../repositories/tickets.Repositories";
-import { TicketStatus } from "@prisma/client";
-import { UserRepository } from "../repositories/user.Repositories";
+import { Request, Response, NextFunction } from 'express';
+import { TicketRepository } from '../repositories/tickets.Repositories';
+import { TicketStatus } from '@prisma/client';
+import { UserRepository } from '../repositories/user.Repositories';
 
 const userRepository = new UserRepository();
 const ticketRepository = new TicketRepository();
@@ -11,15 +11,15 @@ export async function validateTicketCreation(req: Request, res: Response, next: 
   const { userId } = req.params;
 
   if (!titulo || !descricao || !prioridade) {
-    return res.status(400).json({ message: "Campos obrigatórios ausentes" });
+    return res.status(400).json({ message: 'Campos obrigatórios ausentes' });
   }
 
   if (!userId) {
-    return res.status(400).json({ message: "userId não informado nos params" });
+    return res.status(400).json({ message: 'userId não informado nos params' });
   }
 
   const user = await userRepository.findById(Number(userId));
-  if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+  if (!user) return res.status(404).json({ message: 'Usuário não encontrado' });
 
   (req as any).locals = {
     userId: Number(userId),
@@ -34,11 +34,11 @@ export function validateTicketUpdate(req: Request, res: Response, next: NextFunc
   const { userId } = req.params;
 
   if (!status) {
-    return res.status(400).json({ message: "Status é obrigatório" });
+    return res.status(400).json({ message: 'Status é obrigatório' });
   }
 
   if (!userId) {
-    return res.status(400).json({ message: "userId é obrigatório" });
+    return res.status(400).json({ message: 'userId é obrigatório' });
   }
 
   (req as any).locals = {
@@ -52,13 +52,13 @@ export async function checkTicketExists(req: Request, res: Response, next: NextF
   const ticketId = Number(req.params.ticketId);
 
   if (isNaN(ticketId)) {
-    return res.status(400).json({ message: "ID do ticket inválido" });
+    return res.status(400).json({ message: 'ID do ticket inválido' });
   }
 
   const ticket = await ticketRepository.findById(ticketId);
 
   if (!ticket) {
-    return res.status(404).json({ message: "Ticket não encontrado" });
+    return res.status(404).json({ message: 'Ticket não encontrado' });
   }
 
   (req as any).ticket = ticket;
@@ -68,10 +68,10 @@ export async function checkTicketExists(req: Request, res: Response, next: NextF
 export function preventEditClosedTickets(req: Request, res: Response, next: NextFunction) {
   const ticket = (req as any).ticket;
 
-  if (ticket.status === "CONCLUIDA" || ticket.status === "CANCELADA") {
+  if (ticket.status === 'CONCLUIDA' || ticket.status === 'CANCELADA') {
     return res
       .status(400)
-      .json({ message: "Ticket não pode ser editado" });
+      .json({ message: 'Ticket não pode ser editado' });
   }
 
   next();
@@ -88,16 +88,16 @@ export async function checkResponsibleSector(
   const { userId } = (req as any).locals;
 
   const user = await repo.findById(userId);
-  if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+  if (!user) return res.status(404).json({ message: 'Usuário não encontrado' });
 
   const userSectorId = user.sectorId;
 
   if (
-    (status === "EM_ANDAMENTO" || status === "CONCLUIDA") &&
+    (status === 'EM_ANDAMENTO' || status === 'CONCLUIDA') &&
     ticket.setorResponsavelId !== userSectorId
   ) {
     return res.status(403).json({
-      message: "Apenas o setor responsável pode alterar para este status",
+      message: 'Apenas o setor responsável pode alterar para este status',
     });
   }
 

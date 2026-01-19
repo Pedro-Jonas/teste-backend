@@ -24,7 +24,7 @@ router.get(
 );
 
 router.put(
-  "/tickets/:ticketId/user/:userId",
+  '/tickets/:ticketId/user/:userId',
   validateTicketUpdate,      
   checkTicketExists,           
   preventEditClosedTickets,   
