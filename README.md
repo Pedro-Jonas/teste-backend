@@ -28,14 +28,17 @@ Para rodar o projeto, você precisa ter instalado:
 
 ## ▶️ Como rodar o projeto
 
-### 1️⃣ Clonar o repositório
+###  - Clonar o repositório
 
 ```bash
 git clone git@github.com:Pedro-Jonas/teste-backend.git
 cd teste-banckend
 ```
 
-### 2️⃣ Subir os containers
+### - Crie o documento .env na raiz(para fins de avaliação igual o .env.example)
+
+
+### - Subir os containers
 ```bash
 docker compose up --build
 ```
@@ -46,15 +49,15 @@ http://localhost:3000
 
 Após os containers estarem rodando, execute os comandos abaixo em outro terminal.
 
-3️⃣ Rodar as migrations
+### - Rodar as migrations
 ```bash
 docker compose exec app npx prisma migrate dev
 ```
-4️⃣ Rodar o seed (dados iniciais)
+### - Rodar o seed (dados iniciais)
 ```bash
 docker compose exec app npx prisma db seed
 ```
-### Para rodar os testes
+### - Para rodar os testes
 ```bash
 docker compose exec app npm run test
 ```
